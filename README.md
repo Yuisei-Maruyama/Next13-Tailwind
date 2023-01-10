@@ -1,5 +1,37 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+### Set Up
+
+```ts
+npx create-next-app@latest xxx --experimental-app --typescript --eslint
+cd xxx
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+(tailwind.config.js)
+```ts
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+(/app/globals.css)
+```ts
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
 ## Getting Started
 
 First, run the development server:
@@ -10,27 +42,49 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Directory Construction
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+.
+├── README.md
+├── next-env.d.ts
+├── next.config.js
+├── node_modules
+│   ├── ・・・
+・・・
+├── package-lock.json
+├── package.json
+├── public ・・・ 画像やフォント等の素材群
+│   ├── favicon.ico
+│   └── vercel.svg
+│
+├── app
+│   ├── layout.tsx　・・・　共通レイアウトの定義ファイル
+│   ├── page.tsx　・・・　初期ページのUI定義ファイル
+│   └── xxx　（各ページ名） ・・・　各ページのUI定義
+│　　　　　├── layout.tsx　・・・　ページ固有のレイアウト定義ファイル
+│　　　　　└── page.tsx　・・・　ページ固有のUI定義ファイル
+│
+├── components　・・・ 汎用的なコンポーネント
+│   ├── Base　・・・　基礎的な機能(名詞)そのもの、事実上の “型” を表すコンポーネント群
+│   ├── Case　・・・　Baseを拡張して作られる　状況(動詞/形容詞)や状態(名詞)を表すコンポーネント群
+│   ├── Common　・・・　Domain部分で共通して使われる要素を切り出したコンポーネント群
+│   └── Domain　・・・　人(ロール)や物(名詞)など "関心の対象" を表すコンポーネント群
+│
+├── consts　・・・　中央管理したい定数群
+│
+├── globalStates　・・・　Recoil　で制御するステート群
+│   └── xxx（各ドメイン名） ・・・　各ドメインのディレクトリ
+│        ├── xxxAtoms ・・・　ステートを管理するためのデータストア群　　　　　　
+│        └── xxxSelectors　　・・・　Atomのstateを加工した値を返したり、Atomのstateを加工して更新するなどの処理を可能にする関数群
+│　　　　　　
+├── hooks　・・・　汎用的なカスタムフック
+│
+└── styles
+│
+├── postcss.config.js
+│
+├── tailwind.config.js
+│
+└── tsconfig.json
+```
